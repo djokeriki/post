@@ -1,7 +1,4 @@
-# Starter files for my Image Search app tutorial on YouTube.
-
-**USAGE**
-
+Јаќоски
 * Download or clone the repository.
 * Launch the project in terminal.
 * Run "npm install" to create the node_modules folder.
