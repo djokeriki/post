@@ -1,39 +1,64 @@
-import React, {Component} from "react"
-import {v1 as uuid} from 'uuid';
+import React, { Component } from 'react'
 
-import ImageSearch from './ImageSearch/ImageSearch';
-import ImageList from './ImageList/ImageList';
-const API_KEY = "3445631-be9fceed99909024247be43cc";
+class App extends Component {
+  constructor(props) {
+    super(props);
 
-class App extends Component{
-  state = {
-    images: [],
-
+    this.state = {
+      newItem: "",
+      list: []
+    }
   }
-  handleGetRequest = async (e) => {
-    e.preventDefault();
-    const searchTerm = e.target.elements.searchValue.value;
-    const url = `https://pixabay.com/api/?key=${API_KEY}&q=${searchTerm}&image_type=photo`;
+  updateInput(key, value){
+    this.setState({
+      [key]: value
+    })
+  }
+  addItem() {
+    const newItem = {
+      id: 1 + Math.random(),
+      value: this.state.newItem.slice()
+    };
+    const list = [...this.state.list];
 
-    const request = await fetch(url);
-    const response = await request.json();
-    this.setState({images: response.hits})
-    console.log(searchTerm);
-    console.log(this.state.images);
+    list.push(newItem);
+
+    this.setState({
+      list,
+      newItem: ""
+    });
+  }
+  deleteItem(id){
+    const list = [...this.state.list];
+
+    const updatedList = list.filter(item => item.id !== id);
+    this.setState({list: updatedList})
   }
 
-
-
-
-
-  render(){
-    return(
-      <div>
-        <ImageSearch handleGetRequest={this.handleGetRequest} />
-        <ImageList images={this.state.images} />
+  render() {
+    return (
+      <div className="App">
+        <div>Add an Item...       
+        <br />
+        <input
+        type="text"
+        placeholder="Type item here..."
+        value={this.state.newItem}
+        onChange={e => this.updateInput("newItem", e.target.value)}
+        />
       </div>
-    );
+      <button onClick={() => this.addItem()}>Add</button>
+      <br />
+      <ul>
+        {this.state.list.map(item => (
+          <div>
+            <li key={item.id}>{item.value}</li>
+            <button onClick={() => this.deleteItem(item.id)}>X</button>          </div>
+        ))}
+      </ul>
+      </div> 
+    )
   }
-
 }
+
 export default App
